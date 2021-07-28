@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    .red {
+      color:rgb(248, 232, 252)
+      
+    }
+    </style>
+</head>
+<body>
+
+  Image Scaler Public Interface
+
+  
+  
+  <!-- <input type="file" id="file" name="file"> -->
+  <!-- <button onclick="uploadFile()">Upload</button> -->
+  <!-- <form method="post" enctype="multipart/form-data" onsubmit="uploadFile(event)"> -->
+  <!-- <form onsubmit="uploadFile(event)">
+    <input id="file" type="file" name="file"><br>
+    <input id="description" type="text" name="description"><br>
+    <input type="submit">
+  </form> -->
+  
+
+  <script>
+
+    {
+    function uploadFile(e) {
+
+      e.preventDefault()
+
+      const file = document.getElementById("file")
+      const desc = document.getElementById("description")
+      
+      if (!file.files.length) return alert("Please Select File")
+
+
+      const formData = new FormData()
+      formData.append('myImage', file.files[0])
+      formData.append('description', desc.value)
+      
+      
+      // formData.append('myText', textInput.value || 'default text')
+      console.log(formData.get('description'))
+      fetch("http://localhost:8000/images", {
+        method: "POST",
+        //  
+        body: formData
+        
+        
+        
+        
+      })
+      .then(data =>{
+
+        const contentType = data.headers.get("Content-Type")
+
+        return contentType === "application/json" ? data.json() : data.text()
+        
+      })
+      .then(console.log)
+      .catch(console.log)
+
+
+    }
+    }
+
+  </script>
+
+</body>
+</html>
