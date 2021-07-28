@@ -1,21 +1,9 @@
 "use strict";
 
-// const { login, createAccount } = require("../middleware/authentication");
-// const { isMissing } = require("../middleware/verify-data");
-
 const Busboy = require("busboy");
-
-
-// const FormData = require('form-data');
-// const PassThroughStream = require('stream').PassThrough;
 const createHttpError = require("http-errors");
 
 const router = require("express")();
-
-
-// const fs = require("fs");
-// const { getServiceToUse } = require("../middleware/service-finder");
-// const { forwardFileToImageScaler} = require("../middleware/image-processor");
 const { imageFileExtensionOk, getImageScaler, httpRequest } = require("../middleware/image-processor");
 const { sendJSON } = require("../middleware/return-object");
 const { ObjectId } = require("mongodb");
@@ -25,7 +13,7 @@ const { saveImageDatatoDatabase } = require("../middleware/image-database");
 
 
 // /images
-router.route("/")
+router.route("/") 
   .get(getImages)
   .post(updateImages);
 
@@ -35,9 +23,6 @@ router.route("/:id")
   .put(updateImage)
   .delete(deleteImage);
 
-  // /images/testImageService
-router.route("/testImageService")
-  .get(testImageService);
 
 
 
@@ -94,7 +79,6 @@ function getImages(req, res) {
   ///////////////////////
 
   // Return List of Images
-  // Need to Setup Skip
   req.db.db.collection(process.env.appDBImagesCollectionName).find(query)
     .skip(page * itemsPerRequest)
     .limit(itemsPerRequest)
@@ -356,22 +340,3 @@ module.exports = router;
 //     req.pipe(busboy);
 //   })
 // );
-
-/** Testing Image Service
- * @param {object} req Request Object
- * @param {object} res Response Object
- * @returns {undefined}
-*/
-function testImageService (req, res) {
-
-  const body = {
-    s3Key: '610049124265fa8fa2c371a1.jpg',
-    metadata: {"description": "test description"}
-  };
-
-  httpRequest('http://127.0.0.1:8003/images', body)
-  .then(n => sendJSON.call(res, null, n))
-  .catch(n => sendJSON.call(res, n, null));
-
-
-}

@@ -37,6 +37,11 @@ app.get("/admin/setup",(req, res) => {
   fs.createReadStream("./static/setup.html").pipe(res);
 });
 
+// Send Architecture File
+app.get("/admin/design",(req, res) => {
+  fs.createReadStream("./static/design.html").pipe(res);
+});
+
 // Authentication -- Future
 // app.use(isValidUser);
 
@@ -70,7 +75,7 @@ app.use(function(err, req, res, next) {// eslint-disable-line no-unused-vars
 });
 
 // Catch All Error
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res, next) {// eslint-disable-line no-unused-vars
   res.send(err.message || err);
 });
 
