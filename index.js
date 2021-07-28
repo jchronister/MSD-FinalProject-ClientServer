@@ -64,10 +64,15 @@ app.use(function(err, req, res, next) {// eslint-disable-line no-unused-vars
 
   // Troubleshoot
   msg = err.message || err;
-  
+
   res.status(err.status || 500).json(getReturnObject(msg, null));
 
 });
+
+
+app.use(function(err, req, res, next) {
+  res.send(err.message || err)
+}
 
 
 app.listen(process.env.PORT || 3000,()=>{
