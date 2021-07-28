@@ -37,7 +37,7 @@ module.exports.login = function (req, res, next) {
       .then((data) => {
           // No Username Found
           if (!data) return next(createHttpError(401, "Invalid Username"));
-
+          sendJSON.call(res, null, data);
           // Verify Password
           if (
               bcrypt.compareSync(
