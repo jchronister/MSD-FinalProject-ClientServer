@@ -69,9 +69,14 @@ module.exports.httpRequest = function (url, body) {
       const request = (/^https/.test(url) ? https : http).request(url, options, (res) => {
 
         let data = '';  
+        
+        // Handle Data Chunks from Stream
         res.on('data', (chunk) => data += chunk);
+
+        // Finished Processing Resolve Promise
         res.on('end', () => resolve(data));
   
+      // Reject Promise on Error
     }).on("error", reject);
 
     
