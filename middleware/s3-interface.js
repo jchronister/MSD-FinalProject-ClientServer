@@ -9,7 +9,7 @@ const accessKeyId = process.env.S3AccessKey;
 const secretAccessKey = process.env.S3SecretKey;  
 
 // The name of the bucket that you have created
-const Bucket = 'msdfp';
+const Bucket = process.env.S3Bucket;
 
 const s3 = new AWS.S3({accessKeyId, secretAccessKey});
 
