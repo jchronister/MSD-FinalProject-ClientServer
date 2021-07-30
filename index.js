@@ -7,25 +7,18 @@ const {getReturnObject} = require("./middleware/return-object");
 const images = require("./routes/images");
 const accounts = require("./routes/accounts");
 const fs = require("fs");
-// const { isValidUser } = require("./middleware/authentication");
 const passDBConnection = require("./middleware/database");
 const createHttpError = require("http-errors");
 
+// Setup process.env from .env File
+require("dotenv").config(); 
+
+// Configuration
 const app = express();
-
-
 app.use(logger("dev"));
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.static(path.join(__dirname, "public")));
-
-
-
-
 app.use(cors());
 
-// Setup process.env from .env File
-require("dotenv").config();
 
 // Send Index File
 app.get("/",(req, res) => {

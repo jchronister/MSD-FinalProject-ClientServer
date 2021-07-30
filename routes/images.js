@@ -20,10 +20,7 @@ router.route("/")
 
 // /images/:id
 router.route("/:id")
-  .put(updateImage)
-  .delete(deleteImage);
-
-
+  .put(updateImage);
 
 
 // Verify Mongo Id & Create ObjectID
@@ -32,7 +29,6 @@ router.param('id', (req, res, next)=> {
       next();
   }
 });
-
 
 
 /** Return List of Images from Database
@@ -258,38 +254,6 @@ function updateImage (req, res) {
   
 
 }
-
-
-/** Delete Image
- * @param {object} req Request Object
- * @param {object} res Response Object
- * @returns {undefined}
-*/
-function deleteImage (req, res) {
-
-  req.db.db.collection(process.env.appDBImagesCollectionName)
-    .deleteOne({_id: req.params.id})
-    .then(data => {
-      if (data.deletedCount) {
-        sendJSON.call(res, null, "Deleted " + data.deletedCount);
-      } else {
-        sendJSON.call(res, "No Records Updated", null);
-      }
-    })
-    .catch(sendJSON.bind(res));
-  
-    // Delete from S3
-
-
-
-}
-
-
-
-
-
-
-
 
 
 

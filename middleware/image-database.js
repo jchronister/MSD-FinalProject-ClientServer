@@ -1,8 +1,5 @@
 "use strict";
 
-
-
-
 /** Save Image Data to Database
 *  @param {object} db - Database Reference
 *  @param {object} imageInfo - Image Info
@@ -25,4 +22,4 @@ module.exports.saveImageDatatoDatabase = function (db, {user, originalFileName, 
   // Return Database Insert Promise
   return db.collection(process.env.appDBImagesCollectionName).insertOne(info);
 
-}
+};

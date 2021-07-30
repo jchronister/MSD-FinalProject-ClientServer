@@ -1,19 +1,17 @@
 "use strict";
 
-const { login, createAccount } = require('../middleware/authentication');
+const { login, createAccount, setDBCollection } = require('../middleware/authentication');
 const { isMissing } = require('../middleware/verify-data');
 
 const router = require('express')();
 
-
-
 // /accounts/login
 router.route("/login")
-  .post(verifyLoginData, login);
+  .post(verifyLoginData, setDBCollection, login);
 
 // accounts
 router.route("/")
-  .post(verifyCreateAccountData, createAccount);
+  .post(verifyCreateAccountData, setDBCollection, createAccount);
 
 
 /** Verify Login Data
@@ -24,16 +22,14 @@ router.route("/")
 */
 function verifyLoginData (req, res, next) {
 
-  const [email, password] = ["email", "password"];
+  // Username & Password Fields
+  const loginInfo = [["email", "Email"], ["password", "Password"]];
 
   // Verify Info
-  if (isMissing([email, password], req.body,next, ["Email", "Password"])) return;
+  if (isMissing(loginInfo.map(n=>n[0]), req.body,next, loginInfo.map(n=>n[1]))) return;
 
   // Purge Unneeded Data
   req.body = {email: req.body.email, password: req.body.password};
-
-  // Set DB Collection
-  req.db.collection = req.db.db.collection(process.env.appDBAccountsCollectionName);
 
   next();
 
@@ -48,6 +44,7 @@ function verifyLoginData (req, res, next) {
 */
 function verifyCreateAccountData (req, res, next) {
 
+  // Required Fields
   const fields = [    
     ["address", "Address"],
     ["city", "City"],
@@ -63,25 +60,10 @@ function verifyCreateAccountData (req, res, next) {
   if (isMissing(fields.map(n=>n[0]), req.body,next, fields.map(n=>n[1]))) return;
 
   // Purge Unneeded Data
-  req.body = {
-    username: req.body.username,
-    address: req.body.address,
-    city: req.body.city,
-    state: req.body.state,
-    zip: req.body.zip,
-    phone: req.body.phone,
-    email: req.body.email,
-    password: req.body.password,
-    name: req.body.fullname
-  };
-
-  // Set DB Collection
-  req.db.collection = req.db.db.collection("users");
-
+  req.body = fields.reduce((a, n) => ({...a, [req.body[n][0]]: req.body[n][0]}), {});
   next();
 
 }
-
 
 
 module.exports = router;

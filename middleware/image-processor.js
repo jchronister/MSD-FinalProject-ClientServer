@@ -35,9 +35,7 @@ module.exports.imageFileExtensionOk = function (filename) {
 */
 module.exports.getImageScaler = function () {
 
-  const imageScalerInfo =  {"name": "jc.imagescaler.thumbnail",
-  "category": "Image Scaler",
-  "version": 1};
+  const imageScalerInfo =  {identity: "jc.imagescaler.thumbnail Image Scaler 1"};
 
   return getServiceToUse(imageScalerInfo).then(({endpoint}) => {
   
@@ -79,10 +77,9 @@ module.exports.httpRequest = function (url, body) {
       // Reject Promise on Error
     }).on("error", reject);
 
-    
+    // Send Data & End Request
     request.write(JSON.stringify(body));
     request.end();
     });
-
 
 };
