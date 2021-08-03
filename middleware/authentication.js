@@ -113,21 +113,22 @@ module.exports.createAccount = function (req, res, next) {
         bcrypt.hashSync(req.body[req.db.passwordField], 12);
 
       // Insert New User
-      req.db.collection
-        .insertOne(req.body)
+      return req.db.collection.insertOne(req.body);
 
-        // Login If Successfull
-        .then((data) => {
+    })
 
-          if (data.insertedCount === 1) {
+    // Login If Successfull
+    .then((data) => {
 
-            // Send Token
-            sendJSON.call(res, null, signData(req.db.tokenFx({...data.ops[0], _id: data.insertedId})));
-              
-          } else {
-            next(createHttpError(inValidDataHTTPCode, "Account Creation Error. Please Try Again"));
-          }
-        }).catch(next);
+      // Verify One Record Inserted
+      if (data.insertedCount === 1) {
 
-      }).catch(next);
+        // Send Token
+        sendJSON.call(res, null, signData(req.db.tokenFx({...data.ops[0], _id: data.insertedId})));
+          
+      } else {
+        next(createHttpError(inValidDataHTTPCode, "Account Creation Error. Please Try Again"));
+      }
+    }).catch(next);
+
 };

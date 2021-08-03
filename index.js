@@ -35,9 +35,6 @@ app.get("/admin/design",(req, res) => {
   fs.createReadStream("./static/design.html").pipe(res);
 });
 
-// Authentication -- Future
-// app.use(isValidUser);
-
 
 // Routes
 app.use(passDBConnection);
@@ -59,9 +56,6 @@ app.use(function(err, req, res, next) {// eslint-disable-line no-unused-vars
   } else {
     msg = "Server Error";
   }
-
-  // Troubleshoot
-  msg = err.message || err;
 
   res.status(err.status || 500).json(getReturnObject(msg, null));
 
